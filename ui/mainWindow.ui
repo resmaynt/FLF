@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mainWindow</class>
+ <widget class="QDialog" name="mainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1020</width>
+    <height>610</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#mainWindow {
+    border-image: url(:/img/bg.png)0 0 0 0 stretch stretch;
+}
+QWidget#mainWindow{
+background-color: qlineargradient(spread:pad, x1:0.274, y1:0.295, x2:1, y2:1, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));}
+
+</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>20</y>
+     <width>621</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 600 28pt &quot;Segoe UI&quot;;color:rgb(255, 255, 255)</string>
+   </property>
+   <property name="text">
+    <string>Complete the Required Data</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>480</y>
+     <width>161</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>9</pointsize>
+     <weight>75</weight>
+     <italic>false</italic>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* Base */
+QPushButton {
+    border-radius: 15px;
+    border: 1px solid transparent;   /* biar ukuran tidak loncat */
+    padding: 4px;
+
+   
+	font: 600 9pt &quot;Segoe UI&quot;;
+    color: rgb(255, 255, 255);
+    background-color: rgb(49, 99, 148);   /* #316394 */
+}
+
+/* Muncul border hanya ketika ditekan */
+QPushButton:pressed {
+    border-color: #888;
+    background-color: rgb(44, 88, 132);   /* sedikit lebih gelap */
+}
+
+
+
+</string>
+   </property>
+   <property name="text">
+    <string>SUBMIT</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_3">
+   <property name="geometry">
+    <rect>
+     <x>680</x>
+     <y>250</y>
+     <width>71</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* Base */
+QPushButton {
+    border-radius: 5px;
+    border: 1px solid transparent;   /* biar ukuran tidak loncat */
+    padding: 4px;
+
+   
+	font: 600 8pt &quot;Segoe UI&quot;;
+    color: rgb(255, 255, 255);
+    background-color: rgb(49, 99, 148);   /* #316394 */
+}
+
+/* Muncul border hanya ketika ditekan */
+QPushButton:pressed {
+    border-color: #888;
+    background-color: rgb(44, 88, 132);   /* sedikit lebih gelap */
+}
+
+/* Jika mau juga saat di-hover, buka komentar di bawah */
+// QPushButton:hover {
+//     border-color: #888;
+// }
+</string>
+   </property>
+   <property name="text">
+    <string>browser</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="fileLineEdit_2">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>250</y>
+     <width>361</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    border: 1px solid #888;
+    border-radius: 4px;
+    padding: 4px;
+}
+border-radius: 5px;</string>
+   </property>
+   <property name="placeholderText">
+    <string>FLF Report Data (Master)</string>
+   </property>
+   <property name="clearButtonEnabled">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="fileLineEdit">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>190</y>
+     <width>361</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    border: 1px solid #888;
+    border-radius: 4px;
+    padding: 4px;
+}
+border-radius: 5px;</string>
+   </property>
+   <property name="placeholderText">
+    <string>Draft Power BI</string>
+   </property>
+   <property name="clearButtonEnabled">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_2">
+   <property name="geometry">
+    <rect>
+     <x>680</x>
+     <y>190</y>
+     <width>71</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="mouseTracking">
+    <bool>false</bool>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* Base */
+QPushButton {
+    border-radius: 5px;
+    border: 1px solid transparent;   /* biar ukuran tidak loncat */
+    padding: 4px;
+
+
+	font: 600 8pt &quot;Segoe UI&quot;;
+    color: rgb(255, 255, 255);
+    background-color: rgb(49, 99, 148);   /* #316394 */
+}
+
+/* Muncul border hanya ketika ditekan */
+QPushButton:pressed {
+    border-color: #888;
+    background-color: rgb(44, 88, 132);   /* sedikit lebih gelap */
+}
+
+/* Jika mau juga saat di-hover, buka komentar di bawah */
+// QPushButton:hover {
+//     border-color: #888;
+// }
+</string>
+   </property>
+   <property name="text">
+    <string>browser</string>
+   </property>
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="textEdit">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>350</y>
+     <width>104</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="textEdit_2">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>400</y>
+     <width>104</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="textEdit_3">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>350</y>
+     <width>104</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>350</y>
+     <width>41</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 600 8pt &quot;Segoe UI&quot;;color: rgb(255, 255, 255)</string>
+   </property>
+   <property name="text">
+    <string>Year:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>400</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 600 8pt &quot;Segoe UI&quot;;color: rgb(255, 255, 255)</string>
+   </property>
+   <property name="text">
+    <string>Start Row:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>350</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 600 8pt &quot;Segoe UI&quot;;color: rgb(255, 255, 255)</string>
+   </property>
+   <property name="text">
+    <string>Barge Sheet:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>400</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 600 8pt &quot;Segoe UI&quot;;color: rgb(255, 255, 255)</string>
+   </property>
+   <property name="text">
+    <string>Row Count:</string>
+   </property>
+  </widget>
+  <widget class="QToolButton" name="toolButton">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>330</y>
+     <width>521</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgba(0, 49, 99, 149);
+
+border-radius: 12px;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="textEdit_5">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>400</y>
+     <width>104</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <zorder>toolButton</zorder>
+  <zorder>label</zorder>
+  <zorder>pushButton</zorder>
+  <zorder>pushButton_3</zorder>
+  <zorder>fileLineEdit_2</zorder>
+  <zorder>fileLineEdit</zorder>
+  <zorder>pushButton_2</zorder>
+  <zorder>textEdit</zorder>
+  <zorder>textEdit_2</zorder>
+  <zorder>textEdit_3</zorder>
+  <zorder>label_2</zorder>
+  <zorder>label_3</zorder>
+  <zorder>label_4</zorder>
+  <zorder>label_5</zorder>
+  <zorder>textEdit_5</zorder>
+ </widget>
+ <resources>
+  <include location="../qt/sistem/resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

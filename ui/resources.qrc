@@ -1,0 +1,9 @@
+<RCC version="1.0">
+  <qresource prefix="/img">
+    <file>bg.png</file>
+    <file>bg2.png</file>
+    <file>2.jpg</file>
+    <file>logo.png</file>
+    <file>power.ico</file>
+  </qresource>
+</RCC>

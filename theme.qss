@@ -1,0 +1,154 @@
+/* ===== Palette =====
+   bg-deep #0B1220 | bg #0F172A | surface #111827 | surface-2 #1F2937
+   border #334155 | text #ffffffff | dim #94A3B8 | brand #2563EB | brand-2 #1D4ED8
+   success #16A34A | danger #DC2626
+*/
+
+/* ===== Global ===== */
+* { font-family: "Segoe UI","Arial",sans-serif; }
+QMainWindow, QDialog { color:#ffffffff; background: transparent; }
+QWidget { background: transparent; color:#ffffffff; }
+
+/* Sidebar */
+#SideBar { background: transparent; border-right:1px solid rgba(255,255,255,0.18); }
+QLabel#brandCaption { font: 600 6.8pt "Segoe UI"; color:#ffffffff; }
+
+/* Nav buttons */
+QPushButton#navHome,
+QPushButton#navMonthly,
+QPushButton#navYearly {
+  text-align:left;
+  padding:10px 14px;
+  border-radius:10px;
+  background:transparent;
+  color:#ffffffff;
+  border:none;
+  outline: none;
+}
+QPushButton#navHome:hover,
+QPushButton#navMonthly:hover,
+QPushButton#navYearly:hover { background:rgba(0,0,0,.25); }
+QPushButton#navHome[selected="true"],
+QPushButton#navMonthly[selected="true"],
+QPushButton#navYearly[selected="true"] { background:#2563EB; color:white; }
+
+/* Typography */
+QLabel[class="h1"] { font:800 26pt "Segoe UI"; color:#ffffffff; }
+QLabel[class="h2"] { font:800 18pt "Segoe UI"; color:#ffffffff; margin-bottom:4px; }
+QLabel[class="muted"]{ font:600 10pt "Segoe UI"; color:#94A3B8; }
+
+/* ===== Forms & inputs ===== */
+/* → Samakan ALIGNMENT label form (Barge:, Master:, Sheet:) */
+QLabel.formLabel {
+  color:#ffffffff;
+  font-weight:600;
+  qproperty-alignment: 'AlignRight | AlignVCenter';
+  padding-right:0px;
+  margin-right:0px;
+}
+
+QLineEdit, QComboBox, QSpinBox, QTextEdit {
+  background:#0B1220;
+  border:1px solid #334155;
+  border-radius:8px;
+  padding:6px 10px;
+  color:#ffffffff;
+  selection-background-color:#2563EB;
+}
+QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QTextEdit:focus {
+  border-color:#2563EB;
+}
+
+/* Tinggi khusus untuk field file */
+QLineEdit#fileLineEdit,
+QLineEdit#fileLineEdit_2 { min-height:28px; padding:8px 12px; }
+
+QLineEdit:disabled,
+QComboBox:disabled,
+QSpinBox:disabled,
+QTextEdit:disabled {
+  background:#0B1220;
+  color:#94A3B8;
+  border-color:#334155;
+}
+QComboBox::drop-down { border:none; width:24px; }
+QComboBox::down-arrow { image:none; }
+
+/* Browse buttons */
+QPushButton#pushButton_2,
+QPushButton#pushButton_3 { min-height:28px; min-width:80px; }
+
+/* Buttons (Submit mewarisi primary) */
+QPushButton.primary {
+  background:#2563EB;
+  border:1px solid #1D4ED8;
+  color:white;
+  border-radius:10px;
+  padding:8px 12px;
+  min-height:28px;      /* match LINEEDIT_HEIGHT */
+  min-width:80px;       /* match BUTTON_WIDTH */
+}
+QPushButton.primary:hover { background:#1D4ED8; }
+QPushButton.primary:disabled { background:#1F2937; border-color:#1F2937; color:#94A3B8; }
+
+
+QPushButton.ghost {
+  background:transparent;
+  border:1px solid #334155;
+  color:#ffffffff;
+  border-radius:8px;
+  padding:6px 12px;
+}
+QPushButton.ghost:hover { background:#1F2937; }
+
+/* Caption kecil di atas kotak-kotak options (Year, Barge Sheet, dll.) */
+#optionsPanel QLabel[class="optCaption"] {
+  color:#ffffffff;
+  font:600 9.5pt "Segoe UI";
+  letter-spacing:.2px;
+  margin-bottom:2px;
+}
+
+/* Options panel */
+QGroupBox#optionsPanel {
+  background: transparent;
+  border: none;
+  margin-top: 8px;
+  padding-top: 0;
+}
+
+/* Size & jarak kontrol di options (single source of truth) */
+#optionsPanel QComboBox,
+#optionsPanel QSpinBox {
+  min-width:120px;
+  margin-right:10px;
+}
+QComboBox, QSpinBox { min-height:27px; }
+
+/* Log area */
+QTextEdit#logArea {
+  background:#0B1220;
+  border:1px solid #334155;
+  border-radius:8px;
+  color:#ffffffff;
+}
+
+/* Scrollbars */
+QScrollBar:vertical { background:transparent; width:10px; }
+QScrollBar::handle:vertical { background:#334155; min-height:24px; border-radius:6px; }
+QScrollBar:horizontal { background:transparent; height:10px; }
+QScrollBar::handle:horizontal { background:#334155; min-width:24px; border-radius:6px; }
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height:0; }
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { width:0; }
+
+/* Kontainer kanan transparan (bg via BackgroundLabel) */
+#MainArea { background: transparent; border-image: none; }
+
+#powerBtn {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+#powerBtn:hover  { opacity: 1; }   /* jangan berubah saat hover */
+#powerBtn:pressed{ opacity: 0.9; } /* feedback kecil saat diklik */
+#logArea { font-weight: normal; }  /* kalau masih bold, ini menormalkan */
