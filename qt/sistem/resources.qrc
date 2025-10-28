@@ -1,8 +1,0 @@
-<RCC>
-  <qresource prefix="/img">
-    <file>bg.png</file>
-    <file>2.jpg</file>
-    <file>logo.ico</file>
-    <file>power.ico</file>
-  </qresource>
-</RCC>

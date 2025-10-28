@@ -177,10 +177,16 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
     title = QtWidgets.QLabel(kind_label)
     title.setProperty("class", "h1")
     title.setAlignment(QtCore.Qt.AlignHCenter)
-    title.setContentsMargins(0, 0, 0, 4)
-    root_v.addWidget(title, 0, QtCore.Qt.AlignHCenter)
+
+    header = QtWidgets.QWidget()
+    header.setFixedHeight(180)  # tinggi tetap untuk header
+    hb = QtWidgets.QVBoxLayout(header)
+    hb.setContentsMargins(0, 100, 0, 24)  # jarak dalam header saja
+    hb.addWidget(title, 0, QtCore.Qt.AlignHCenter)
 
     # Stack: 0=Form, 1=Run/Log
+    root_v.setContentsMargins(24, 24, 24, 16)  # margin normal, bukan 130
+    root_v.addWidget(header, 0)  # header tidak “mendorong” form
     stack = QtWidgets.QStackedWidget()
     root_v.addWidget(stack, 1)
 
@@ -189,7 +195,7 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
     form.setAttribute(QtCore.Qt.WA_StyledBackground, True)
 
     vbox = QtWidgets.QVBoxLayout(form)
-    vbox.setContentsMargins(0, 90, 0, 0)   
+    vbox.setContentsMargins(0, 10, 0, 0)   
     vbox.setSpacing(16)                   # was: 6
     vbox.setAlignment(QtCore.Qt.AlignTop) # paksa konten nempel ke atas
 
@@ -322,6 +328,15 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
 
     stack.addWidget(run)
 
+    # --- Simple page switch that toggles header visibility
+    def switch_to_form():
+        header.setVisible(True)       # header tampil di Form
+        stack.setCurrentIndex(0)
+
+    def switch_to_run():
+        header.setVisible(False)      # header disembunyikan di Run
+        stack.setCurrentIndex(1)
+
     # ===== Handlers =====
     def set_path(line_edit: QtWidgets.QLineEdit, title: str) -> None:
         path = browse_excel(page, title)
@@ -374,7 +389,7 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
             f"Row Count    : {opts.row_count}\n"
         )
         if confirm_summary(page, summary):
-            stack.setCurrentIndex(1)
+            switch_to_run()
             log.clear()
             btn_end.setEnabled(False)
             page._opts = opts  # simpan opsi di page
@@ -422,7 +437,7 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
     power_btn.clicked.connect(on_start)
 
     # End → balik ke form, bersihkan log, hidupkan ikon power lagi
-    btn_end.clicked.connect(lambda: (stack.setCurrentIndex(0), power_btn.setEnabled(True), log.clear()))
+    btn_end.clicked.connect(lambda: (switch_to_form(), power_btn.setEnabled(True), log.clear()))
 
     return page
 
