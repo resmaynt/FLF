@@ -18,6 +18,23 @@ from openpyxl import load_workbook
 import os
 import inspect
 
+# === Tambahan untuk reset runtime saat End ===
+import importlib
+import app.config as cfg
+import app.mapping as mapping
+import app.main_logic as logic
+
+def reset_runtime_state() -> None:
+    """Reload modul & bersihkan override volatile supaya state tidak nempel antar-run."""
+    try:
+        importlib.reload(cfg)
+        importlib.reload(mapping)
+        importlib.reload(logic)
+        if hasattr(cfg, "FORCE_MONTH_OVERRIDE"):
+            cfg.FORCE_MONTH_OVERRIDE = ""
+    except Exception:
+        pass
+
 # =============================
 # Konstanta UI untuk konsistensi
 # =============================
@@ -41,7 +58,7 @@ GAP_AFTER_FILES = 1
 OPT_TOP_MARGIN = 20
 OPT_RIGHT_MARGIN_EXTRA = BUTTON_WIDTH  # supaya rata dengan tombol Browse
 OPT_VSPACE = 10
-OPT_HSPACE = 16 #jarak antar kotak dalam satu baris
+OPT_HSPACE = 16 # jarak antar kotak dalam satu baris
 
 
 # =============================
@@ -96,7 +113,6 @@ class Worker(QtCore.QThread):
             # Jika runner mendukung argumen progress, berikan sinyal progress.emit
             if "progress" in inspect.signature(self._runner).parameters:
                 totals, logs = self._runner(progress=self.progress.emit)
-
             else:
                 totals, logs = self._runner()
             self.finished.emit(totals, logs)
@@ -172,7 +188,6 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
     root_v.setContentsMargins(48, 130, 48, 16)   # ⇠ top margin kecil
     root_v.setSpacing(10)
 
-
     # Judul halaman (tetap)
     title = QtWidgets.QLabel(kind_label)
     title.setProperty("class", "h1")
@@ -195,14 +210,13 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
     form.setAttribute(QtCore.Qt.WA_StyledBackground, True)
 
     vbox = QtWidgets.QVBoxLayout(form)
-    vbox.setContentsMargins(0, 10, 0, 0)   
+    vbox.setContentsMargins(0, 10, 0, 0)
     vbox.setSpacing(16)                   # was: 6
     vbox.setAlignment(QtCore.Qt.AlignTop) # paksa konten nempel ke atas
 
     # Baris input file
     row_barge = QtWidgets.QHBoxLayout()
     row_master = QtWidgets.QHBoxLayout()
-    
 
     lbl_barge = QtWidgets.QLabel("Barge:", objectName="lblBarge")
     lbl_master = QtWidgets.QLabel("Master:", objectName="lblMaster")
@@ -283,6 +297,17 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
     grid.addWidget(cell_top("Start Row",   spin_start,  START_WIDTH), 0, 3)
     grid.setColumnStretch(0, 1); grid.setColumnStretch(1, 1)
 
+    # === CHECKBOX BARU ===
+    cb_clear = QtWidgets.QCheckBox("Clear row before write")
+    cb_clear.setChecked(True)
+    cb_clear.setFixedHeight(CTRL_HEIGHT)
+
+    cb_clear = QtWidgets.QCheckBox("Clear row before write")
+    cb_clear.setChecked(True)
+    cb_clear.setFixedHeight(CTRL_HEIGHT)
+
+    grid.addWidget(cb_clear, 1, 0, 1, 2)
+
     vbox.addLayout(row_sheet)
 
     # ---------- Submit ----------
@@ -302,11 +327,10 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
     run = QtWidgets.QWidget(objectName=f"{key}Run")
     run.setAttribute(QtCore.Qt.WA_StyledBackground, True)
     run_v = QtWidgets.QVBoxLayout(run); run_v.setSpacing(12)
-    run_v.setContentsMargins(0, 0, 0, 0)   # <<— top offset KHUSUS halaman Run
-    run_v.setSpacing(12)
-    run_v.setAlignment(QtCore.Qt.AlignTop) 
+    run_v.setContentsMargins(0, 0, 0, 0)
+    run_v.setAlignment(QtCore.Qt.AlignTop)
     power_btn = QtWidgets.QPushButton()
-    
+
     power_btn.setObjectName("powerBtn")
     power_btn.setIcon(QtGui.QIcon(":/img/power.ico"))   # pastikan ada di resources
     power_btn.setIconSize(QtCore.QSize(120, 120))       # ukuran ikon
@@ -354,6 +378,8 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
                                        fill_sheets(combo_sheet, le_barge.text())))
     btn_master.clicked.connect(lambda: set_path(le_master, "Pilih FLF Report Data (master)"))
 
+
+    
     def build_options() -> RunOptions:
         return RunOptions(
             master_path=le_master.text().strip(),
@@ -364,7 +390,8 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
             row_count=spin_count.value(),
             only_completed=True,
             dry_run=False,
-        )
+            clear_before_write=cb_clear.isChecked(),  # cuma ini
+    )
 
     def validate_paths(master: str, barge: str) -> bool:
         if not (master and master.lower().endswith(".xlsx") and os.path.exists(master)):
@@ -387,7 +414,9 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
             f"Barge Sheet  : {opts.barge_sheet}\n"
             f"Start Row    : {opts.start_row}\n"
             f"Row Count    : {opts.row_count}\n"
+            f"Clear Row?   : {opts.clear_before_write}\n"
         )
+
         if confirm_summary(page, summary):
             switch_to_run()
             log.clear()
@@ -401,7 +430,6 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
             raise RuntimeError("Options belum di-submit.")
         # Pakai partial, jangan lambda
         return partial(runner_func, opts)
-
 
     def on_start() -> None:
         power_btn.setEnabled(False)
@@ -428,7 +456,6 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
             done_popup(page, ok=True)
             btn_end.setEnabled(True)
 
-
         worker.finished.connect(done)
         worker.failed.connect(lambda e: (done_popup(page, ok=False), btn_end.setEnabled(True)))
         worker.start()
@@ -436,8 +463,25 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
     # klik ikon power = mulai
     power_btn.clicked.connect(on_start)
 
-    # End → balik ke form, bersihkan log, hidupkan ikon power lagi
-    btn_end.clicked.connect(lambda: (switch_to_form(), power_btn.setEnabled(True), log.clear()))
+    # End → reset runtime, balik ke form, bersihkan log, hidupkan ikon power lagi
+    def on_end_clicked() -> None:
+        # putus worker
+        if hasattr(page, "_worker"):
+            page._worker = None
+        # reset modul/state & opsi
+        reset_runtime_state()
+        if hasattr(page, "_opts"):
+            page._opts = None
+        # clear form agar submit ulang → state fresh
+        le_barge.clear()
+        le_master.clear()
+        combo_sheet.clear()
+        combo_sheet.addItem(DEFAULT_BARGE_SHEET)
+        switch_to_form()
+        power_btn.setEnabled(True)
+        log.clear()
+
+    btn_end.clicked.connect(on_end_clicked)
 
     return page
 

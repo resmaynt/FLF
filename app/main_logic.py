@@ -28,7 +28,7 @@ def excel_col_to_idx(col_letter: str) -> int:
 
 def month_string_to_master_key(month_cell: Any, year: int) -> str:
     """
-    Terima 'Aug', 'AUG', '1 Aug', 'Aug 2025', atau datetime -> 'Aug-25'
+    Terima 'Aug', 'AUG', '1 Aug', 'Aug 2025', or datetime -> 'Aug-25'
     """
     if pd.isna(month_cell):
         raise ValueError("Month cell is empty")
@@ -269,10 +269,19 @@ def find_master_row(ws, month_key: str) -> int | None:
                 return r
     return None
 
+def apply_to_master(
+    master_path,
+    sheet_name: str,
+    totals: Dict[str, Dict[str, float]],
+    dry_run: bool = False,
+    clear_before_write: bool = True,
+    clear_value: float | None = 0.0,  # ← biarin; nanti kita panggil dengan None
+) -> list:
 
-def apply_to_master(master_path, sheet_name: str, totals: Dict[str, Dict[str, float]], dry_run=False) -> list:
     """
-    Tulis hasil agregasi ke workbook master (REPLACE nilai lama).
+    Tulis hasil agregasi ke workbook master.
+    Jika clear_before_write=True: kosongkan semua kolom FLF di baris bulan tsb dulu,
+    lalu tulis angka baru (REPLACE).
     """
     wb = load_workbook(master_path)
     if sheet_name not in wb.sheetnames:
@@ -281,7 +290,14 @@ def apply_to_master(master_path, sheet_name: str, totals: Dict[str, Dict[str, fl
     ws = wb[sheet_name]
     logs: list = []
 
+    # indeks semua kolom FLF kecuali kolom Month/Year
     col_index = {k: excel_col_to_idx(v) for k, v in MASTER_COLUMNS.items() if k != "Month/Year"}
+
+    def _as_float_or_zero(x) -> float:
+        try:
+            return float(str(x).replace(",", ""))
+        except Exception:
+            return 0.0
 
     for month_key, flf_totals in sorted(totals.items()):
         r = find_master_row(ws, month_key)
@@ -289,18 +305,25 @@ def apply_to_master(master_path, sheet_name: str, totals: Dict[str, Dict[str, fl
             logs.append(f"[WARN] Month '{month_key}' not found in master sheet '{sheet_name}'. Skipped.")
             continue
 
+        # --- CLEAR row bulan ini dulu (opsional)
+        if clear_before_write:
+            for flf_name, c in col_index.items():
+                cell = ws.cell(r, c)
+                old_val = _as_float_or_zero(cell.value)
+                new_v = None if clear_value is None else float(clear_value)  # ← ini yang bikin kosong
+                
+                if not dry_run:
+                    cell.value = new_v
+                logs.append(f"[{month_key}] {flf_name}: cleared (was {fmt_money(old_val)})")
+
+        # lalu tulis angka baru
         for flf_name, new_val in flf_totals.items():
             c = col_index.get(flf_name)
             if not c:
                 logs.append(f"[WARN] Unknown FLF column '{flf_name}' in master. Skipped.")
                 continue
             cell = ws.cell(r, c)
-            old_val = cell.value or 0
-            try:
-                old_val = float(str(old_val).replace(",", ""))
-            except Exception:
-                old_val = 0.0
-
+            old_val = _as_float_or_zero(cell.value)
             logs.append(f"[{month_key}] {flf_name}: set to {fmt_money(new_val)} (was {fmt_money(old_val)})")
             if not dry_run:
                 cell.value = float(new_val)
@@ -326,9 +349,17 @@ def run_pipeline(opts: RunOptions, progress=lambda *_: None) -> Tuple[Dict[str, 
         warn = "[WARN] No totals aggregated — cek Status filter, parsing 'ActualLoaded', mapping 'FLFNominate', atau format bulan."
         progress(warn)
         return totals, [warn]
-
+    
     sheet_name = MASTER_SHEET_NAMES.get(opts.target_year, str(opts.target_year))
     progress(f"Writing to master sheet '{sheet_name}' (dry_run={opts.dry_run}) …")
-    logs = apply_to_master(opts.master_path, sheet_name, totals, dry_run=opts.dry_run)
+    logs = apply_to_master(
+        opts.master_path,
+        sheet_name,
+        totals,
+        dry_run=opts.dry_run,
+        clear_before_write=opts.clear_before_write,
+        clear_value=None,  # ← KOSONGKAN sel saat clear
+    )
+
     progress("Done.")
     return totals, logs

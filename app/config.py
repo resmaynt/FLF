@@ -25,17 +25,6 @@ MONTH_NAME_MAP = {
     "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12
 }
 
-# # Kolom di workbook Barge (berdasar huruf kolom Excel)
-# BARGE_COLUMNS = {
-#     "No.": "B",
-#     "Month": "C",
-#     "STATUS": "P",
-#     "ACTUAL LOADED": "BN",
-#     "LOADING FACILITIES": "BP",
-#     "FLF/FC NOMINATE": "BQ",
-# }
-
-
 BARGE_COLUMNS = {
     "No": "B",
     "Month": "C",
@@ -71,8 +60,8 @@ class RunOptions:
     start_row: int
     row_count: int
     only_completed: bool = False
-    dry_run: bool = False     # default now APPLY
-
+    dry_run: bool = False
+    clear_before_write: bool = True
 
 def fmt_money(val: float) -> str:
     return f"{float(val):,.0f}"
