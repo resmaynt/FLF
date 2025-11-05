@@ -218,8 +218,8 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
     row_barge = QtWidgets.QHBoxLayout()
     row_master = QtWidgets.QHBoxLayout()
 
-    lbl_barge = QtWidgets.QLabel("Barge:", objectName="lblBarge")
-    lbl_master = QtWidgets.QLabel("Master:", objectName="lblMaster")
+    lbl_barge = QtWidgets.QLabel("FLF File:", objectName="lblBarge")
+    lbl_master = QtWidgets.QLabel("Final File:", objectName="lblMaster")
     for lbl in (lbl_barge, lbl_master):
         lbl.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         lbl.setProperty("class", "formLabel")
