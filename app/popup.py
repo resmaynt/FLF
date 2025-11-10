@@ -15,6 +15,14 @@ class DataConfirmDialog(QtWidgets.QDialog):
         # SET IKON SEKALI, TANPA CEK QFile.exists (karena ini resource)
         self.setWindowIcon(QtGui.QIcon(window_icon_path))
 
+        # === Tambahan: hilangkan '?' dan tampilkan tombol minimize di popup
+        self.setWindowFlag(QtCore.Qt.WindowContextHelpButtonHint, False)
+        self.setWindowFlag(QtCore.Qt.WindowMinimizeButtonHint, True)
+        self.setWindowFlag(QtCore.Qt.WindowSystemMenuHint, True)
+        # (opsional) tombol maximize
+        # self.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint, True)
+
+
         # ukuran & judul
         self.resize(480, 400)
         self.setMinimumSize(QtCore.QSize(480, 400))
