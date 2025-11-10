@@ -69,9 +69,9 @@ def _detect_barge_columns(df, hint_row: Optional[int] = None) -> Dict[str, int]:
 
     def _normalize_block(block: pd.DataFrame) -> pd.DataFrame:
         return (
-            block
-            .fillna("")
-            .map(lambda x: str(x).strip().upper())
+        block
+        .fillna("")
+        .map(lambda x: str(x).strip().upper())
     )
 
     def best_map_in(range_df: pd.DataFrame) -> Tuple[Dict[str, int], int]:

@@ -9,8 +9,6 @@ from functools import partial
 # Contoh: pyrcc5 resources.qrc -o ui/resources_rc.py
 import ui.resources_rc  # noqa: F401
 from app.popup import confirm_summary
-from PyQt5.QtWidgets import QAbstractSpinBox
-
 
 # Import dari modul Anda sendiri
 from app.config import MASTER_SHEET_NAMES, DEFAULT_BARGE_SHEET, RunOptions
@@ -376,10 +374,13 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
         if sheets and DEFAULT_BARGE_SHEET in sheets:
             combo.setCurrentText(DEFAULT_BARGE_SHEET)
 
-    btn_barge.clicked.connect(lambda: (set_path(le_barge, "Pilih Barge workbook"),
-                                       fill_sheets(combo_sheet, le_barge.text())))
-    btn_master.clicked.connect(lambda: set_path(le_master, "Pilih FLF Report Data (master)"))
 
+    def on_pick_barge():
+        set_path(le_barge, "Pilih Barge workbook")
+        fill_sheets(combo_sheet, le_barge.text())
+    btn_barge.clicked.connect(on_pick_barge)
+
+    btn_master.clicked.connect(lambda: set_path(le_master, "Pilih FLF Report Data (master)"))
 
 
     def build_options() -> RunOptions:
@@ -532,7 +533,7 @@ def create_window() -> QtWidgets.QDialog:
     side_tint.lower()
 
     brand = QtWidgets.QLabel(side)
-    brand.setPixmap(QtGui.QPixmap(":/img/logo"))
+    brand.setPixmap(QtGui.QPixmap(":/img/logo.png"))
     brand.setScaledContents(True)
     brand.setGeometry(66, 12, 70, 46)
 

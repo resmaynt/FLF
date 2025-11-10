@@ -39,13 +39,14 @@ QLabel[class="muted"]{ font:600 10pt "Segoe UI"; color:#94A3B8; }
 
 /* ===== Forms & inputs ===== */
 /* → Samakan ALIGNMENT label form (Barge:, Master:, Sheet:) */
-QLabel.formLabel {
+QLabel[class="formLabel"] { 
   color:#ffffffff;
   font-weight:600;
   qproperty-alignment: 'AlignRight | AlignVCenter';
   padding-right:0px;
   margin-right:0px;
 }
+
 
 QLineEdit, QComboBox, QSpinBox, QTextEdit {
   background:#0B1220;
