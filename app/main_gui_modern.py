@@ -563,9 +563,12 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
 
 def create_window() -> QtWidgets.QDialog:
     dlg = QtWidgets.QDialog()
-    dlg.setWindowTitle("Automation System")
+    dlg.setWindowTitle("FLF Automation System")
     dlg.resize(WINDOW_MIN_W, WINDOW_MIN_H)
     dlg.setMinimumSize(WINDOW_MIN_W, WINDOW_MIN_H)
+
+    # pakai logo-side.jpg di title bar kiri atas
+    dlg.setWindowIcon(QtGui.QIcon(":/img/logo-side.jpg"))
 
     # Background bersama
     root_bg = BackgroundLabel(dlg)

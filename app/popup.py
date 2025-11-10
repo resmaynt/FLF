@@ -4,9 +4,13 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 
 class DataConfirmDialog(QtWidgets.QDialog):
     def __init__(self, parent=None, text: str = "",
-                 window_icon_path: str = "assets/Coal_Supply_Chain.png"):
+                 window_icon_path: str = ":/img/logo-side.jpg"):
         super().__init__(parent)
         self.setObjectName("ConfirmDialog")
+
+        # set icon title bar popup (cukup sekali)
+        self.setWindowIcon(QtGui.QIcon(window_icon_path))
+
 
         # ukuran & judul
         self.resize(480, 400)
@@ -136,9 +140,18 @@ class DataConfirmDialog(QtWidgets.QDialog):
 
 
 def confirm_summary(parent: QtWidgets.QWidget, text: str,
-                    icon_path: str = "assets/Coal_Supply_Chain.png") -> bool:
+                    icon_path: str = ":/img/logo-side.jpg") -> bool:
     app = QtWidgets.QApplication.instance()
-
+    old_font = app.font()
+    normal = QtGui.QFont(old_font); normal.setBold(False); normal.setPointSize(10)
+    app.setFont(normal)
+    try:
+        dlg = DataConfirmDialog(parent=parent, text=text, window_icon_path=icon_path)
+        # ... (lanjutan tetap sama)
+        return dlg.exec_() == QtWidgets.QDialog.Accepted
+    finally:
+        app.setFont(old_font)
+        
     # 1) Simpan font global lama (yang semi-bold)
     old_font = app.font()
 

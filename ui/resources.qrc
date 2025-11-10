@@ -2,8 +2,8 @@
   <qresource prefix="/img">
     <file>bg.png</file>
     <file>bg2.png</file>
-    <file>3.png</file>
     <file>logo.png</file>
     <file>power.ico</file>
+    <file>logo-side.jpg</file> 
   </qresource>
 </RCC>
