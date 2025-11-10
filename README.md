@@ -55,20 +55,6 @@ python run.py
 
 ## Files
 
-- FLF-Automation/
-
-  app/
-    main_gui_modern.py     # GUI logic (PyQt5 modern layout)
-    main_logic.py          # Data processing pipeline
-    config.py              # Configuration (sheet names, columns, etc.)
-    mapping.py             # FLF name normalization/mapping
-    popup.py               # Confirmation popup dialog
-  ui/
-    resources_rc.py        # Auto-generated from resources.qrc
-    resources.qrc              # Qt resources (images/icons)
-run.py                     # Entry point to launch GUI
-requirements.txt           # Python dependencies
-README.md                  # This file
-theme.qss                  # Application stylesheet (dark theme)
+<pre> ``` FLF-Automation/ │ ├── app/ │ ├── main_gui_modern.py # GUI logic (PyQt5 modern layout) │ ├── main_logic.py # Data processing pipeline │ ├── config.py # Configuration (sheet names, columns, etc.) │ ├── mapping.py # FLF name normalization/mapping │ └── popup.py # Confirmation popup dialog │ ├── ui/ │ ├── resources_rc.py # Auto-generated from resources.qrc │ └── resources.qrc # Qt resources (images/icons) │ ├── theme.qss # Application stylesheet (dark theme) ├── run.py # Entry point to launch GUI ├── requirements.txt # Python dependencies └── README.md # This file ``` </pre>
 
 > Tip: Work on a copy of your workbooks. The app writes back to `draft final.xlsx`.
