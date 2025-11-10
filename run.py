@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle("Fusion")
-    app.setFont(QtGui.QFont("Segoe UI", 10, 600))  # 10pt, weight 600 (semi-bold)
+    app.setFont(QtGui.QFont("Segoe UI", 10))  # 10pt, weight 600 (semi-bold)
 
 
 

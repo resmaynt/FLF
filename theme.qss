@@ -152,3 +152,12 @@ QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { width:0; }
 #powerBtn:hover  { opacity: 1; }   /* jangan berubah saat hover */
 #powerBtn:pressed{ opacity: 0.9; } /* feedback kecil saat diklik */
 #logArea { font-weight: normal; }  /* kalau masih bold, ini menormalkan */
+
+/* === BOLD untuk tombol utama di app === */
+QPushButton#pushButton,          /* Submit */
+QPushButton#pushButton_2,        /* Browse (FLF) */
+QPushButton#pushButton_3,        /* Browse (Final) */
+QPushButton#navHome,             /* Home (sidebar) */
+QPushButton#navMonthly {         /* FLF Monthly (sidebar) */
+    font-weight: 700;
+}

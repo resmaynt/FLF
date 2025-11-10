@@ -2,7 +2,7 @@ import re
 from typing import List
 
 MASTER_KEYS = [
-    "Apollo","Zeus","Mara","August","Eagle","WHS","Bulk Java","Ratu Dewata","Labor","Green Calypso"
+    "Apollo","Zeus","Mara","August","Eagle","WHS","Bulk Java","Ratu Dewata","Labor","Green Calypso", "FC Sumber"
 ]
 
 # Variasi nama umum -> target
@@ -23,6 +23,13 @@ SYNONYMS_RAW = {
     "RATUDEWATA": "Ratu Dewata",
     "GREENCALYPSO": "Green Calypso",
     "MUTIARA JAWA": "Eagle",
+
+    "FC SUMBER": "FC Sumber",
+    "FC-SUMBER": "FC Sumber",
+    "FCSUMBER": "FC Sumber",
+    "FC SUMBER 1001": "FC Sumber",
+    "FC-SUMBER-1001": "FC Sumber",
+    "FCSUMBER1001": "FC Sumber",
 }
 
 def normalize_token(s: str) -> str:

@@ -14,6 +14,7 @@ MASTER_COLUMNS = {
     "Ratu Dewata": "J",
     "Labor": "K",
     "Green Calypso": "L",
+    "FC Sumber":"M",
 }
 
 # Format teks bulan di master (mis. "Aug-25")
