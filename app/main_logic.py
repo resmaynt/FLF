@@ -64,8 +64,15 @@ def _detect_barge_columns(df, hint_row: Optional[int] = None) -> Dict[str, int]:
     Fallback: awal sheet (0..400), lalu lebih dalam (0..1200), lalu mapping lama dari config.
     Mengembalikan map {logical_name: col_index_0_based} dan kunci tambahan '_header_row'.
     """
+    # def _normalize_block(block: pd.DataFrame) -> pd.DataFrame:
+    #     return block.fillna("").astype(str).applymap(lambda s: s.strip().upper())
+
     def _normalize_block(block: pd.DataFrame) -> pd.DataFrame:
-        return block.fillna("").astype(str).applymap(lambda s: s.strip().upper())
+        return (
+            block
+            .fillna("")
+            .map(lambda x: str(x).strip().upper())
+    )
 
     def best_map_in(range_df: pd.DataFrame) -> Tuple[Dict[str, int], int]:
         # return (map_kolom, indeks_baris_dalam_range)

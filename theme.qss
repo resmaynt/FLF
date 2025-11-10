@@ -102,6 +102,7 @@ QPushButton.ghost {
 QPushButton.ghost:hover { background:#1F2937; }
 
 /* Caption kecil di atas kotak-kotak options (Year, Barge Sheet, dll.) */
+
 #optionsPanel QLabel[class="optCaption"] {
   color:#ffffffff;
   font:600 9.5pt "Segoe UI";
@@ -123,7 +124,8 @@ QGroupBox#optionsPanel {
   min-width:120px;
   margin-right:10px;
 }
-QComboBox, QSpinBox { min-height:27px; }
+
+QLineEdit, QComboBox,QSpinBox { min-height:27px; }
 
 /* Log area */
 QTextEdit#logArea {

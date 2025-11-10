@@ -9,6 +9,7 @@ from functools import partial
 # Contoh: pyrcc5 resources.qrc -o ui/resources_rc.py
 import ui.resources_rc  # noqa: F401
 from app.popup import confirm_summary
+from PyQt5.QtWidgets import QAbstractSpinBox
 
 
 # Import dari modul Anda sendiri
@@ -48,10 +49,12 @@ BUTTON_WIDTH = 90
 CTRL_HEIGHT = 45   # ← match the line edit / button height
 
 # Opsi panel
-YEAR_WIDTH = 80
+YEAR_WIDTH = 125
 SHEET_WIDTH = 110
 START_WIDTH = 80
 COUNT_WIDTH = 80
+
+
 
 # Padding/Spacing
 TOP_PAD_FORM = 1
@@ -256,14 +259,31 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
     row_sheet.addWidget(options, 1, QtCore.Qt.AlignVCenter)
     row_sheet.setSpacing(12)
 
-    combo_year = QtWidgets.QComboBox()
-    for y in sorted(MASTER_SHEET_NAMES.keys()):
-        combo_year.addItem(str(y))
-    combo_year.setCurrentText(str(max(MASTER_SHEET_NAMES.keys())))
+    # combo_year = QtWidgets.QComboBox()
+    # for y in sorted(MASTER_SHEET_NAMES.keys()):
+    #     combo_year.addItem(str(y))
+    # combo_year.setCurrentText(str(max(MASTER_SHEET_NAMES.keys())))
+    
+    year_edit = QtWidgets.QLineEdit()
+    year_edit.setPlaceholderText("mis. 2026")
+    year_edit.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+
+
+    year_edit.setText(str(max(MASTER_SHEET_NAMES.keys())))
 
     combo_sheet = QtWidgets.QComboBox(); combo_sheet.addItem(DEFAULT_BARGE_SHEET)
     spin_start = QtWidgets.QSpinBox();  spin_start.setRange(1, 1_000_000); spin_start.setValue(246)
     spin_count = QtWidgets.QSpinBox();  spin_count.setRange(0, 1_000_000); spin_count.setValue(29)
+
+    # Hilangkan tombol panah ↑↓
+    spin_start.setButtonSymbols(QtWidgets.QAbstractSpinBox.NoButtons)
+    spin_count.setButtonSymbols(QtWidgets.QAbstractSpinBox.NoButtons)
+
+    # (Opsional) Matikan scroll wheel biar nggak keubah tanpa sengaja
+    def _no_wheel(e): e.ignore()
+    spin_start.wheelEvent = _no_wheel
+    spin_count.wheelEvent = _no_wheel
+
 
     def cell_top(caption: str, ctrl: QtWidgets.QWidget, width: int) -> QtWidgets.QWidget:
         w = QtWidgets.QWidget()
@@ -277,7 +297,7 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
         v.addWidget(lab); v.addWidget(ctrl)
         return w
 
-    grid.addWidget(cell_top("Year",        combo_year,  YEAR_WIDTH),  0, 0)
+    grid.addWidget(cell_top("Year",        year_edit,  YEAR_WIDTH),  0, 0)
     grid.addWidget(cell_top("Barge Sheet", combo_sheet, SHEET_WIDTH), 0, 1)
     grid.addWidget(cell_top("Row Count",   spin_count,  COUNT_WIDTH), 0, 2)
     grid.addWidget(cell_top("Start Row",   spin_start,  START_WIDTH), 0, 3)
@@ -361,19 +381,27 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
     btn_master.clicked.connect(lambda: set_path(le_master, "Pilih FLF Report Data (master)"))
 
 
-    
+
     def build_options() -> RunOptions:
+        # parse tahun dari year_edit (fallback ke nilai default jika kosong)
+        txt = year_edit.text().strip()
+        try:
+            yr = int(txt)
+        except Exception:
+            yr = max(MASTER_SHEET_NAMES.keys())  # fallback aman
+
         return RunOptions(
             master_path=le_master.text().strip(),
             barge_path=le_barge.text().strip(),
             barge_sheet=combo_sheet.currentText().strip() or DEFAULT_BARGE_SHEET,
-            target_year=int(combo_year.currentText()),
+            target_year=yr,
             start_row=spin_start.value(),
             row_count=spin_count.value(),
             only_completed=True,
             dry_run=False,
-            clear_before_write=cb_clear.isChecked(),  # cuma ini
-    )
+            clear_before_write=cb_clear.isChecked(),
+        )
+
 
     def validate_paths(master: str, barge: str) -> bool:
         if not (master and master.lower().endswith(".xlsx") and os.path.exists(master)):
