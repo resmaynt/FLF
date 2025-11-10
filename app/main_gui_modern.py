@@ -5,11 +5,11 @@ from typing import Callable, Iterable, List, Tuple
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 from functools import partial
-from app.popup import confirm_summary
-
 # Pastikan resources.qrc sudah di-compile menjadi ui/resources_rc.py
 # Contoh: pyrcc5 resources.qrc -o ui/resources_rc.py
 import ui.resources_rc  # noqa: F401
+from app.popup import confirm_summary
+
 
 # Import dari modul Anda sendiri
 from app.config import MASTER_SHEET_NAMES, DEFAULT_BARGE_SHEET, RunOptions
@@ -121,95 +121,95 @@ class Worker(QtCore.QThread):
             self.failed.emit(str(e))
 
 
-# =============================
-# Dialog ringkas
-# =============================
-# =============================
-# Dialog konfirmasi bergaya custom (meniru contoh PyQt6)
-# =============================
-class DataConfirmDialog(QtWidgets.QDialog):
-    def __init__(self, parent=None, text: str = "", window_icon_path: str = ""):
-        super().__init__(parent)
-        self.setObjectName("Dialog")
-        self.setWindowTitle("Data Confirmation")
-        # ukuran & batas seperti contoh
-        self.resize(480, 400)
-        self.setMinimumSize(QtCore.QSize(480, 400))
-        self.setMaximumSize(QtCore.QSize(480, 400))
+# # =============================
+# # Dialog ringkas
+# # =============================
+# # =============================
+# # Dialog konfirmasi bergaya custom (meniru contoh PyQt6)
+# # =============================
+# class DataConfirmDialog(QtWidgets.QDialog):
+#     def __init__(self, parent=None, text: str = "", window_icon_path: str = ""):
+#         super().__init__(parent)
+#         self.setObjectName("Dialog")
+#         self.setWindowTitle("Data Confirmation")
+#         # ukuran & batas seperti contoh
+#         self.resize(480, 400)
+#         self.setMinimumSize(QtCore.QSize(480, 400))
+#         self.setMaximumSize(QtCore.QSize(480, 400))
 
-        # icon jendela (prioritas: resource, lalu file path)
-        icon = QtGui.QIcon()
-        if QtGui.QIcon.hasThemeIcon(window_icon_path):
-            icon = QtGui.QIcon.fromTheme(window_icon_path)
-        elif window_icon_path and QtCore.QFile.exists(window_icon_path):
-            icon = QtGui.QIcon(window_icon_path)
-        else:
-            # fallback ke resource yang sudah ada di project (ubah jika perlu)
-            icon = QtGui.QIcon(":/img/logo")
-        self.setWindowIcon(icon)
+#         # icon jendela (prioritas: resource, lalu file path)
+#         icon = QtGui.QIcon()
+#         if QtGui.QIcon.hasThemeIcon(window_icon_path):
+#             icon = QtGui.QIcon.fromTheme(window_icon_path)
+#         elif window_icon_path and QtCore.QFile.exists(window_icon_path):
+#             icon = QtGui.QIcon(window_icon_path)
+#         else:
+#             # fallback ke resource yang sudah ada di project (ubah jika perlu)
+#             icon = QtGui.QIcon(":/img/logo")
+#         self.setWindowIcon(icon)
 
-        # font util
-        def mk_font(point_size: int, bold: bool = True) -> QtGui.QFont:
-            f = QtGui.QFont()
-            f.setFamily("Arial")
-            f.setPointSize(point_size)
-            f.setBold(bold)
-            return f
+#         # font util
+#         def mk_font(point_size: int, bold: bool = True) -> QtGui.QFont:
+#             f = QtGui.QFont()
+#             f.setFamily("Arial")
+#             f.setPointSize(point_size)
+#             f.setBold(bold)
+#             return f
 
-        # layout absolute agar mirip dengan contoh (boleh diganti layout jika mau)
-        # --- Label judul
-        self.label = QtWidgets.QLabel(self)
-        self.label.setGeometry(QtCore.QRect(30, 20, 421, 21))
-        self.label.setFont(mk_font(15, True))
-        self.label.setText("Please check if the data is correct?")
+#         # layout absolute agar mirip dengan contoh (boleh diganti layout jika mau)
+#         # --- Label judul
+#         self.label = QtWidgets.QLabel(self)
+#         self.label.setGeometry(QtCore.QRect(30, 20, 421, 21))
+#         self.label.setFont(mk_font(15, True))
+#         self.label.setText("Please check if the data is correct?")
 
-        # --- Text area ringkasan
-        self.textEdit_popup = QtWidgets.QTextEdit(self)
-        self.textEdit_popup.setGeometry(QtCore.QRect(30, 70, 421, 251))
-        self.textEdit_popup.setFont(mk_font(12, True))
-        self.textEdit_popup.setObjectName("textEdit_popup")
-        self.textEdit_popup.setReadOnly(True)
-        self.textEdit_popup.setText(text)
+#         # --- Text area ringkasan
+#         self.textEdit_popup = QtWidgets.QTextEdit(self)
+#         self.textEdit_popup.setGeometry(QtCore.QRect(30, 70, 421, 251))
+#         self.textEdit_popup.setFont(mk_font(12, True))
+#         self.textEdit_popup.setObjectName("textEdit_popup")
+#         self.textEdit_popup.setReadOnly(True)
+#         self.textEdit_popup.setText(text)
 
-        # --- Tombol Cancel
-        self.btn_cancel = QtWidgets.QPushButton(self)
-        self.btn_cancel.setGeometry(QtCore.QRect(130, 350, 91, 31))
-        self.btn_cancel.setFont(mk_font(12, True))
-        self.btn_cancel.setText("Cancel")
-        self.btn_cancel.clicked.connect(self.reject)
+#         # --- Tombol Cancel
+#         self.btn_cancel = QtWidgets.QPushButton(self)
+#         self.btn_cancel.setGeometry(QtCore.QRect(130, 350, 91, 31))
+#         self.btn_cancel.setFont(mk_font(12, True))
+#         self.btn_cancel.setText("Cancel")
+#         self.btn_cancel.clicked.connect(self.reject)
 
-        # --- Tombol OK
-        self.btn_send = QtWidgets.QPushButton(self)
-        self.btn_send.setGeometry(QtCore.QRect(270, 350, 91, 31))
-        self.btn_send.setFont(mk_font(12, True))
-        self.btn_send.setText("OK")
-        self.btn_send.clicked.connect(self.accept)
+#         # --- Tombol OK
+#         self.btn_send = QtWidgets.QPushButton(self)
+#         self.btn_send.setGeometry(QtCore.QRect(270, 350, 91, 31))
+#         self.btn_send.setFont(mk_font(12, True))
+#         self.btn_send.setText("OK")
+#         self.btn_send.clicked.connect(self.accept)
 
-        # default/esc behavior
-        self.btn_send.setDefault(True)
-        self.btn_send.setAutoDefault(True)
-        self.btn_cancel.setAutoDefault(False)
+#         # default/esc behavior
+#         self.btn_send.setDefault(True)
+#         self.btn_send.setAutoDefault(True)
+#         self.btn_cancel.setAutoDefault(False)
 
-        # supaya Enter = OK, Esc = Cancel
-        self.setTabOrder(self.btn_cancel, self.btn_send)
+#         # supaya Enter = OK, Esc = Cancel
+#         self.setTabOrder(self.btn_cancel, self.btn_send)
 
-        # fokus awal ke OK
-        self.btn_send.setFocus()
+#         # fokus awal ke OK
+#         self.btn_send.setFocus()
 
-        # aksesibilitas tambahan
-        self.setModal(True)
+#         # aksesibilitas tambahan
+#         self.setModal(True)
 
-def confirm_summary(parent: QtWidgets.QWidget, text: str) -> bool:
-    """
-    Ganti QMessageBox dengan dialog custom yang meniru style referensi PyQt6.
-    Mengembalikan True jika user klik OK.
-    """
-    # Ubah path icon jika kamu ingin pakai file spesifik:
-    # icon_path = "assets/Coal_Supply_Chain.png"
-    # atau biarkan kosong untuk fallback ke resource ":/img/logo"
-    icon_path = ""
-    dlg = DataConfirmDialog(parent=parent, text=text, window_icon_path=icon_path)
-    return dlg.exec_() == QtWidgets.QDialog.Accepted
+# def confirm_summary(parent: QtWidgets.QWidget, text: str) -> bool:
+#     """
+#     Ganti QMessageBox dengan dialog custom yang meniru style referensi PyQt6.
+#     Mengembalikan True jika user klik OK.
+#     """
+#     # Ubah path icon jika kamu ingin pakai file spesifik:
+#     # icon_path = "assets/Coal_Supply_Chain.png"
+#     # atau biarkan kosong untuk fallback ke resource ":/img/logo"
+#     icon_path = ""
+#     dlg = DataConfirmDialog(parent=parent, text=text, window_icon_path=icon_path)
+#     return dlg.exec_() == QtWidgets.QDialog.Accepted
 
 def done_popup(parent: QtWidgets.QWidget, ok: bool = True) -> None:
     mb = QtWidgets.QMessageBox(parent)
