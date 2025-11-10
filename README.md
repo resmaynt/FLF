@@ -1,44 +1,76 @@
+# FLF Automation System
 
-# Barge → Master Excel Automation (Qt + Pandas + OpenPyXL)
+A desktop application built with **PyQt5** for automating FLF data integration between “Barge Report” and “Master Power BI” Excel workbooks.
 
-A small desktop tool to take rows from **Barge Line Up 2025** and post totals into **master 2** (sheets 2023/2024/2025) by month and FLF (Apollo, Zeus, Mara, August, Eagle, WHS, Bulk Java, Ratu Dewata, Labor, Green Calypso).
+This tool is designed to streamline monthly data consolidation and ensure consistency across FLF datasets.
 
-## Quick start
+## Environment
+
+Requires **Python ≥ 3.10** (due to use of modern type hints
+
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+# Windows
+.venv\Scripts\activate
+# macOS / Linux
+source .venv/bin/activate
 pip install -r requirements.txt
-python app/main_gui.py
+python run.py
 ```
 
-## Typical workflow
-1) Open **Qt Designer** (optional) and tweak `ui/main_window.ui`.
-2) (Optional) Convert `.ui` → `.py`:  
-   `python tools/convert_ui.py`  (uses the `pyside6-uic` command if available)
-3) Run the app: `python app/main_gui.py`
-4) In the UI, pick:
-   - *Master workbook*: `master 2.xlsx`
-   - *Barge workbook*: `Barge Line Up 2025.xlsx`
-   - Choose target **Year** (2023/2024/2025), Barge sheet (default: `VLU 2025`).
-   - Input *Start row* and *Row count* (example from screenshot: `246` and `28`).
-   - Keep *Only STATUS = COMPLETED* checked (recommended).
-5) Click **Run**. The tool will sum ACTUAL LOADED by FLF/FC NOMINATE per month,
-   then **add** those totals into the corresponding month row in the master sheet
-   (summing with any existing numbers).
+## Workflow
+
+---
+1. Select **FLF Report (Barge)** and **Final (Master)** Excel files.
+2. Choose target year, sheet, starting row, and number of rows.
+3. Confirm data summary.
+4. Process:
+   * Reads Barge sheet (detects header)
+   * Filters *Status = Complete*
+   * Aggregates totals per FLF per month
+   * Writes to Master workbook
+5. View detailed logs in the UI.
+6. Click **End** to reset state.
+---
+
+## Features
+
+✅ Modern PyQt5 GUI (with sidebar navigation)
+
+✅ Excel data parsing using **pandas + openpyxl**
+
+✅ Dynamic sheet & row detection
+
+✅ “Clear row before write” option to avoid data duplication
+
+✅ Live log window & progress reporting
+
+✅ Reloads runtime modules to reset state after each r
 
 ## Matching rules
+
 - Exact match between `FLF/FC NOMINATE` and the master FLF columns is used first.
-- You can customize synonyms/splitting in `mapping.py` (e.g., `"WHS ISKANDAR" -> "WHS"`, `"ZEUS-APOLLO" -> ["ZEUS","APOLLO"]`).  
+- You can customize synonyms/splitting in `mapping.py` (e.g., `"WHS ISKANDAR" -> "WHS"`, `"ZEUS-APOLLO" -> ["ZEUS","APOLLO"]`).
 - Configure columns or behaviors in `config.py`.
 
 ## Files
-- `app/main_gui.py` — App entry.
-- `app/interface.py` — Wire UI <-> logic, file browsing, logging.
-- `app/main_logic.py` — Excel parsing and update logic.
-- `app/mapping.py` — Canonicalization & synonyms for FLF names.
-- `app/config.py` — Central configuration (sheets, columns).
-- `ui/main_window.ui` — Qt Designer UI.
-- `tools/convert_ui.py` — Optional `.ui` → `.py` generator.
-- `requirements.txt` — Dependencies.
+
+- FLF-Automation/
+  │
+  ├── app/
+  │   ├── main_gui_modern.py     # GUI logic (PyQt5 modern layout)
+  │   ├── main_logic.py          # Data processing pipeline
+  │   ├── config.py              # Configuration (sheet names, columns, etc.)
+  │   ├── mapping.py             # FLF name normalization/mapping
+  │   └── popup.py               # Confirmation popup dialog
+  │
+  ├── ui/
+  │   └── resources_rc.py        # Auto-generated from resources.qrc
+  │
+  ├── theme.qss                  # Application stylesheet (dark theme)
+  ├── resources.qrc              # Qt resources (images/icons)
+  ├── run.py                     # Entry point to launch GUI
+  ├── requirements.txt           # Python dependencies
+  └── README.md                  # This file
 
 > Tip: Work on a copy of your workbooks. The app writes back to `master 2.xlsx`.

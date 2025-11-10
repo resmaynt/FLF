@@ -71,7 +71,8 @@ def _detect_barge_columns(df, hint_row: Optional[int] = None) -> Dict[str, int]:
         return (
         block
         .fillna("")
-        .map(lambda x: str(x).strip().upper())
+        .astype(str)
+        .applymap(lambda s: s.strip().upper())
     )
 
     def best_map_in(range_df: pd.DataFrame) -> Tuple[Dict[str, int], int]:
