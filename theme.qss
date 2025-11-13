@@ -88,7 +88,9 @@ QPushButton.primary {
   padding:8px 12px;
   min-height:28px;      /* match LINEEDIT_HEIGHT */
   min-width:80px;       /* match BUTTON_WIDTH */
+  font-weight:700;           /* ← tambahkan ini */
 }
+
 QPushButton.primary:hover { background:#1D4ED8; }
 QPushButton.primary:disabled { background:#1F2937; border-color:#1F2937; color:#94A3B8; }
 

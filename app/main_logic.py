@@ -141,6 +141,7 @@ def read_barge_rows(opts: RunOptions) -> tuple[pd.DataFrame, str | None]:
 
     # start/end slice
     start0 = max(opts.start_row - 1, 0)
+
     # kalau user start di atas header, geser ke bawah header
     if header_row >= 0 and start0 <= header_row:
         start0 = header_row + 1
@@ -171,10 +172,49 @@ def read_barge_rows(opts: RunOptions) -> tuple[pd.DataFrame, str | None]:
     # slice baris yang diproses
     view = view.iloc[start0:end0]
 
-    # filter status (ketat)
-    if opts.only_completed and "Status" in view.columns:
-        status = view["Status"].astype(str).str.strip().str.upper()
-        view = view[status.isin({"COMPLETE", "COMPLETED"})]
+    # ==== FILTER STATUS dengan "pinjam status atas" untuk baris data yang kosong statusnya ====
+    if opts.only_completed:
+        needed = ("Status", "FLFNominate", "LoadingFacilities", "ActualLoaded")
+        if all(col in view.columns for col in needed):
+            # normalisasi status
+            st_raw = (
+                view["Status"].astype(str).str.strip().str.upper()
+                .replace({"NAN": ""})
+            )
+
+            # baris terlihat seperti data (bukan subtotal) jika punya tujuan/fasilitas
+            looks_data = (
+                view["FLFNominate"].astype(str).str.strip().ne("") |
+                view["LoadingFacilities"].astype(str).str.strip().ne("")
+            )
+
+            # helper: cek apakah kolom ActualLoaded berisi angka
+            def _is_number(x):
+                try:
+                    s = str(x).strip().replace("\u00A0", " ").replace(" ", "")
+                    if "." in s and "," in s:
+                        s = s.replace(".", "").replace(",", ".")
+                    elif "," in s:
+                        part = s.split(",")[-1]
+                        s = s.replace(",", "") if len(part) == 3 else s.replace(",", ".")
+                    float(s)
+                    return True
+                except Exception:
+                    return False
+
+            has_amount = view["ActualLoaded"].apply(_is_number)
+
+            # hanya pinjam status dari baris atas kalau: status kosong + ini baris data + ada nilai
+            carry_ok = st_raw.eq("") & looks_data & has_amount
+            st_eff = st_raw.mask(carry_ok, st_raw.shift(1))
+
+            # pakai status efektif untuk filter
+            view = view[st_eff.isin({"COMPLETE", "COMPLETED"})]
+        else:
+            # fallback kalau ada kolom yang kurang: pakai filter lama
+            status = view.get("Status", "").astype(str).str.strip().str.upper()
+            view = view[status.isin({"COMPLETE", "COMPLETED"})]
+
 
     return view, header_month_key
 

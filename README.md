@@ -21,6 +21,7 @@ python run.py
 ## Workflow
 
 ---
+
 1. Select **FLF Report (Barge)** and **Final (Master)** Excel files.
 2. Choose target year, sheet, starting row, and number of rows.
 3. Confirm data summary.
@@ -31,6 +32,7 @@ python run.py
    * Writes to Master workbook
 5. View detailed logs in the UI.
 6. Click **End** to reset state.
+
 ---
 
 ## Features
@@ -55,6 +57,32 @@ python run.py
 
 ## Files
 
-<pre> ``` FLF-Automation/ │ ├── app/ │ ├── main_gui_modern.py # GUI logic (PyQt5 modern layout) │ ├── main_logic.py # Data processing pipeline │ ├── config.py # Configuration (sheet names, columns, etc.) │ ├── mapping.py # FLF name normalization/mapping │ └── popup.py # Confirmation popup dialog │ ├── ui/ │ ├── resources_rc.py # Auto-generated from resources.qrc │ └── resources.qrc # Qt resources (images/icons) │ ├── theme.qss # Application stylesheet (dark theme) ├── run.py # Entry point to launch GUI ├── requirements.txt # Python dependencies └── README.md # This file ``` </pre>
+FLF-Automation/
+│
+├── app/
+│   ├── main_gui_modern.py     # GUI logic (PyQt5 modern layout)
+│   ├── main_logic.py          # Data processing pipeline
+│   ├── config.py              # Configuration (sheet names, columns, etc.)
+│   ├── mapping.py             # FLF name normalization/mapping
+│   └── popup.py               # Confirmation popup dialog
+│
+├── ui/
+│   ├── resources_rc.py        # Auto-generated from resources.qrc
+│   └── resources.qrc          # Qt resources (images/icons)
+│
+├── theme.qss                  # Application stylesheet (dark theme)
+├── run.py                     # Entry point to launch GUI
+├── requirements.txt           # Python dependencies
+└── README.md                  # This file
 
-> Tip: Work on a copy of your workbooks. The app writes back to `draft final.xlsx`.
+# Windows
+
+.venv\Scripts\activate
+
+# macOS / Linux
+
+source .venv/bin/activate
+pip install -r requirements.txt
+python run.py
+
+> Tip: Work on a copy of your workbooks. The app writes back to `master 2.xlsx`.

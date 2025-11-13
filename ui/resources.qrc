@@ -4,6 +4,12 @@
     <file>bg2.png</file>
     <file>logo.png</file>
     <file>power.ico</file>
-    <file>logo-side.jpg</file> 
+    <file>flf.ico</file>
+    <file>logo-side.jpg</file>
+  </qresource>
+
+  <qresource prefix="/qss">
+    <!-- path relatif dari file .qrc ke theme.qss -->
+    <file>../theme.qss</file>
   </qresource>
 </RCC>

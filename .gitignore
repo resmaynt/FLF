@@ -1,14 +1,19 @@
+@"
 # Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.venv/
-.env
 
-# Build/Dist
+# Virtual env
+.venv/
+
+# Build artifacts
 build/
 dist/
+*.spec
 
-# Qt/PySide generated
-*.qrc.dep
+# Editor/OS
+.DS_Store
+Thumbs.db
+"@ | Set-Content .gitignore

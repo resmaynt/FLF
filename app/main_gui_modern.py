@@ -346,7 +346,10 @@ def build_flf_page(kind_label: str, runner_func: Callable[..., Tuple[object, obj
     run_v.addWidget(log, 1)
 
     end_row = QtWidgets.QHBoxLayout(); end_row.addStretch(1)
-    btn_end = QtWidgets.QPushButton("End"); btn_end.setEnabled(False); btn_end.setProperty("class", "primary")
+    btn_end = QtWidgets.QPushButton("End"); 
+    btn_end.setObjectName("pushButton")
+    btn_end.setEnabled(False); 
+    btn_end.setProperty("class", "primary")
     end_row.addWidget(btn_end)
     run_v.addLayout(end_row)
 
